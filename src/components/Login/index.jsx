@@ -1,56 +1,133 @@
-import { useState } from 'react'
-import axios from 'axios'
-import { GoogleLogin, googleLogout } from '@react-oauth/google'
-import { LoginSocialFacebook } from 'reactjs-social-login'
-import { FacebookLoginButton } from 'react-social-login-buttons'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from "react";
+import axios from "axios";
+import { GoogleLogin, googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { LoginSocialFacebook } from "reactjs-social-login";
+import { FacebookLoginButton } from "react-social-login-buttons";
+import { Link, useNavigate } from "react-router-dom";
+import { FaFacebook } from "react-icons/fa6";
+
 const Login = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [username, setUserName] = useState('')
-  const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [provider, setProvider] = useState("");
+  const [idToken, setIdToken] = useState("");
+  const navigate = useNavigate();
   const handleLoginSuccess = (credentialResponse) => {
-    console.log(credentialResponse)
-    setIsLoggedIn(true)
-  }
+    console.log(credentialResponse);
+    setProvider(credentialResponse.clientId);
+    setIdToken(credentialResponse.credential);
+    SignInGoogle();
+    // setIsLoggedIn(true);
+  };
 
   const handleLogout = () => {
-    googleLogout()
-    setIsLoggedIn(false)
-  }
+    googleLogout();
+    setIsLoggedIn(false);
+  };
 
   const signIn = async () => {
     try {
       const response = await axios.post(
-        'https://localhost:5000/api/Accounts/SignIn',
+        "https://localhost:5000/api/Accounts/SignIn",
         {
           UserName: username,
           Password: password,
         }
-      )
+      );
 
-      console.log(response.data)
       if (response.data.statusCode === 200) {
-        alert('Đăng nhập thành công')
+        alert("Đăng nhập thành công");
         // Lưu access token và refresh token vào local storage
-        localStorage.setItem('accessToken', response.data.data.accessToken)
-        localStorage.setItem('refreshToken', response.data.data.refreshToken)
-        navigate('/')
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        navigate("/");
       }
     } catch (error) {
       if (error.response) {
-        console.log('Lỗi từ server:', error.response.data)
+        // Kiểm tra lỗi từ server
+        if (error.response.status === 404) {
+          alert("Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.");
+        } else {
+          console.log("Lỗi từ server:", error.response.data);
+        }
       } else if (error.request) {
-        console.log('Không nhận được phản hồi từ server:', error.request)
+        console.log("Không nhận được phản hồi từ server:", error.request);
       } else {
-        console.log('Lỗi khi thiết lập yêu cầu:', error.message)
+        console.log("Lỗi khi thiết lập yêu cầu:", error.message);
       }
     }
-  }
+  };
 
+  const SignInGoogle = async () => {
+    try {
+      const response = await axios.post(
+        "https://localhost:5000/api/Accounts/SignInGoogle",
+        {
+          Provider: provider,
+          IdToken: idToken,
+        }
+      );
+      console.log(response.data);
+      if (response.data.statusCode === 200) {
+        // Lưu access token và refresh token vào local storage
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        navigate("/");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log("Lỗi từ server:", error.response.data);
+      } else if (error.request) {
+        console.log("Không nhận được phản hồi từ server:", error.request);
+      } else {
+        console.log("Lỗi khi thiết lập yêu cầu:", error.message);
+      }
+    }
+  };
+
+  const SignInFacebook = async (data) => {
+    try {
+      const response = await axios.post(
+        "https://localhost:5000/api/Accounts/SignInFacebook",
+        {
+          Provider: data.provider,
+          IdToken: data.data.accessToken,
+        }
+      );
+      console.log(response.data);
+      if (response.data.statusCode === 200) {
+        // Lưu access token và refresh token vào local storage
+        localStorage.setItem("accessToken", response.data.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+        navigate("/");
+      }
+    } catch (error) {
+      if (error.response) {
+        console.log("Lỗi từ server:", error.response.data);
+      } else if (error.request) {
+        console.log("Không nhận được phản hồi từ server:", error.request);
+      } else {
+        console.log("Lỗi khi thiết lập yêu cầu:", error.message);
+      }
+    }
+  };
+
+  // const login = useGoogleLogin({
+  //   onSuccess: (credentialResponse) => {
+  //     console.log(credentialResponse);
+  //     setProvider(credentialResponse.clientId);
+  //     setIdToken(credentialResponse.credential);
+  //     SignInGoogle();
+  //   },
+  //   onError: (error) => console.log("Login Failed:", error),
+  // });
+
+  console.log(provider);
+  console.log(idToken);
   return (
     <div className="flex flex-col items-center justify-center w-screen min-h-screen bg-white sm:bg-gray-200">
-      <div className="w-full h-screen px-8 py-8 bg-white shadow-none sm:shadow-lg sm:px-12 xs:w-full sm:w-8/12 md:w-7/12 lg:w-7/12 xl:w-2/6 sm:h-auto">
+      <div className="w-full h-screen px-6 py-8 bg-white shadow-none sm:shadow-lg sm:px-6 xs:w-full sm:w-8/12 md:w-7/12 lg:w-7/12 xl:w-2/6 sm:h-auto">
         <div className="w-full p-4 text-3xl font-bold text-center text-gray-600">
           Đăng nhập
         </div>
@@ -98,7 +175,7 @@ const Login = () => {
                     strokeWidth="2"
                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
                   />
-                </svg>{' '}
+                </svg>{" "}
                 Đăng nhập
               </button>
             </div>
@@ -114,33 +191,42 @@ const Login = () => {
               <div className="bg-[#dbdbdb] flex-1 h-[1px] w-full"></div>
             </div>
             <div className="flex flex-row w-full gap-2">
-              {!isLoggedIn ? (
-                <GoogleLogin
-                  onSuccess={handleLoginSuccess}
-                  onError={() => {
-                    console.log('Login Failed')
-                  }}
-                  text="Đăng nhập bằng Google"
-                />
-              ) : (
-                <button onClick={handleLogout}>Đăng xuất</button>
-              )}
+              <GoogleLogin
+                onSuccess={handleLoginSuccess}
+                onError={() => {
+                  console.log("Login Failed");
+                }}
+              />
+
+              {/* <button
+                className="flex items-center justify-center w-full h-10 px-2 border text-[14px] text-[#3c4043] border-solid cursor-pointer"
+                onClick={login}
+              >
+                Đăng nhập với Google{" "}
+              </button> */}
 
               <LoginSocialFacebook
                 appId="1805063776679899"
-                onResolve={(response) => {
-                  console.log(response)
+                onResolve={async (response) => {
+                  console.log(response);
+                  await SignInFacebook(response);
                 }}
                 onReject={(error) => {
-                  console.log(error)
+                  console.log(error);
                 }}
+                className="w-full"
               >
-                <FacebookLoginButton />
+                <div className="flex items-center justify-center w-full h-10 px-2 border border-solid cursor-pointer">
+                  <FaFacebook className="h-[18px]  mr-2 w-[18px] text-blue-500" />
+                  <span className="text-[14px] text-[#3c4043]">
+                    Đăng nhập bằng Facebook
+                  </span>
+                </div>
               </LoginSocialFacebook>
             </div>
             <div className="flex flex-row items-center justify-center my-2">
               <p>
-                Bạn mới đến ShopDev?{' '}
+                Bạn mới đến TechTrendy?{" "}
                 <Link to="/register" className="text-blue-600 cursor-pointer">
                   Đăng ký
                 </Link>
@@ -150,7 +236,7 @@ const Login = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

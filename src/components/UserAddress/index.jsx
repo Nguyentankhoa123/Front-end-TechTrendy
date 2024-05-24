@@ -123,6 +123,9 @@ const UserAddress = ({ setIsOpen, address, onAddressUpdate }) => {
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div className="w-1/2 p-8 bg-white">
           <form>
+            <p className="flex justify-center mb-5 text-xl">
+              Địa chỉ nhận hàng
+            </p>
             <div className="">
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div className="">

@@ -1,24 +1,24 @@
-import { FaPlus } from 'react-icons/fa6'
-import { HiMiniCpuChip } from 'react-icons/hi2'
-import { BsGpuCard } from 'react-icons/bs'
-import { FaMemory, FaHdd, FaLaptop } from 'react-icons/fa'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { searchProducts, setSearchTerm } from '../../searchSlice'
+import { FaPlus } from "react-icons/fa6";
+import { HiMiniCpuChip } from "react-icons/hi2";
+import { BsGpuCard } from "react-icons/bs";
+import { FaMemory, FaHdd, FaLaptop } from "react-icons/fa";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { searchProducts, setSearchTerm } from "../../searchSlice";
 const Search = () => {
-  const dispatch = useDispatch()
-  const searchTerm = useSelector((state) => state.search.term)
-  const allProducts = useSelector((state) => state.search.products)
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.search.term);
+  const allProducts = useSelector((state) => state.search.products);
 
   useEffect(() => {
     if (searchTerm) {
-      dispatch(searchProducts(searchTerm))
+      dispatch(searchProducts(searchTerm));
     }
-  }, [searchTerm, dispatch])
+  }, [searchTerm, dispatch]);
 
-  console.log(allProducts)
+  console.log(allProducts);
 
   return (
     <>
@@ -28,7 +28,7 @@ const Search = () => {
             <div className="grid gap-4 lg:grid-cols-5 md:grid-cols-3">
               {allProducts.map((laptop) => (
                 <Link to={`/products/${laptop.id}`} key={laptop.id}>
-                  <div className="h-full flex flex-col w-full p-4 overflow-hidden rounded shadow-md cursor-pointer bg-white hover:boxshadow-dark">
+                  <div className="flex flex-col w-full h-full p-4 overflow-hidden bg-white rounded shadow-md cursor-pointer hover:boxshadow-dark">
                     <a className="relative block h-48 rounded w-full mt-[10px] overflow-hidden mx-auto aspect-w-16 aspect-h-8 md:mb-2 mb-4 ">
                       <img
                         alt="ecommerce"
@@ -66,9 +66,9 @@ const Search = () => {
                       </div>
                     </div>
                     <p className="mt-auto text-[#4F89FC] font-bold">
-                      {laptop.price.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
+                      {laptop.price.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
                       })}
                     </p>
                   </div>
@@ -78,9 +78,8 @@ const Search = () => {
           </div>
         </section>
       </div>
-      <p>test</p>
     </>
-  )
-}
+  );
+};
 
-export default Search
+export default Search;

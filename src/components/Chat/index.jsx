@@ -87,7 +87,7 @@ const Chat = ({
               </div>
               <div className="flex flex-col p-5">
                 <button onClick={handleSubmit} type="button">
-                  Chat
+                  Tiến hành chat
                 </button>
               </div>
             </div>

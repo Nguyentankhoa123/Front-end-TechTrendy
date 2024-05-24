@@ -24,7 +24,16 @@
   .work-break {
     word-break: break-all;
     display: -webkit-box;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+  }
+  .work-break-3 {
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -60,5 +69,21 @@
 
   .transition-hover {
     transition: all 0.3s ease-in-out;
+  }
+  .width-compare {
+    width: calc(100% - 25%);
+  }
+  .boxshadow-compare {
+    box-shadow: 0 15px 10px -15px rgba(102, 102, 102, 0.3);
+  }
+
+  .border-compare {
+    border-left: 0.5px solid #e0e0e0;
+    border-bottom: 0.5px solid #e0e0e0;
+    border-right: 0.5px solid #e0e0e0;
+    border-top: 1.5px solid #222;
+  }
+  .background-title {
+    background-position: right center;
   }
 }

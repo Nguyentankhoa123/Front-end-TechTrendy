@@ -130,7 +130,9 @@ const Register = () => {
             <div className="flex flex-row items-center justify-center ">
               <p>
                 Bạn đã có tài khoản?{' '}
-                <Link className="text-blue-600 cursor-pointer">Đăng nhập</Link>
+                <Link to="/login" className="text-blue-600 cursor-pointer">
+                  Đăng nhập
+                </Link>
               </p>
             </div>
           </div>

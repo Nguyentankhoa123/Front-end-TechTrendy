@@ -1,113 +1,59 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from "react-router-dom";
 
 // import { jwtDecode } from 'jwt-decode'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback } from "react";
 
-import { FaCartShopping } from 'react-icons/fa6'
+import { FaCartShopping } from "react-icons/fa6";
 
-// import axios from 'axios'
-
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchCartCount } from '../../cartSlice'
-import { searchProducts } from '../../searchSlice'
-import { FaUserLarge } from 'react-icons/fa6'
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCartCount } from "../../cartSlice";
+import { searchProducts } from "../../searchSlice";
+import { FaUserLarge } from "react-icons/fa6";
 
 const Header = ({ user, setUser }) => {
-  const dispatch = useDispatch()
-  const count = useSelector((state) => state.cart.count)
-  // const [user, setUser] = useState(null)
-  // const [isRefreshing, setIsRefreshing] = useState(false)
-  // const [cartCount, setCartCount] = useState(0)
-  const [inputValue, setInputValue] = useState('')
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const count = useSelector((state) => state.cart.count);
 
-  // const refreshToken = useCallback(async () => {
-  //   if (!isRefreshing) {
-  //     setIsRefreshing(true)
-  //     try {
-  //       const currentRefreshToken = localStorage.getItem('refreshToken')
-
-  //       const response = await axios.post(
-  //         'https://localhost:5000/api/RefreshToken/refresh-token',
-  //         {
-  //           AccessToken: localStorage.getItem('accessToken'),
-  //           RefreshToken: currentRefreshToken,
-  //         }
-  //       )
-
-  //       if (response.data.statusCode === 200) {
-  //         console.log(response.data.data)
-  //         localStorage.setItem('accessToken', response.data.data.accessToken)
-  //         localStorage.setItem('refreshToken', response.data.data.refreshToken)
-  //         const decodedToken = jwtDecode(response.data.data.accessToken)
-  //         setUser(decodedToken)
-  //       }
-  //     } catch (error) {
-  //       console.log('Lỗi khi làm mới token:', error.message)
-  //       localStorage.removeItem('accessToken')
-  //       localStorage.removeItem('refreshToken')
-  //       setUser(null)
-  //     } finally {
-  //       setIsRefreshing(false)
-  //     }
-  //   }
-  // }, [isRefreshing])
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('accessToken')
-  //   if (token) {
-  //     const decodedToken = jwtDecode(token)
-  //     if (decodedToken.exp * 1000 < Date.now()) {
-  //       refreshToken()
-  //     } else {
-  //       setUser(decodedToken)
-  //     }
-  //   }
-  // }, [refreshToken])
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchCartCount())
-  }, [dispatch])
+    dispatch(fetchCartCount());
+  }, [dispatch]);
 
   const logout = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    setUser(null)
-  }
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setUser(null);
+  };
 
   const handleSearchChange = (event) => {
-    setInputValue(event.target.value)
-  }
+    setInputValue(event.target.value);
+  };
 
   const handleSearchSubmit = (event) => {
-    event.preventDefault()
-    if (inputValue.trim() !== '') {
-      dispatch(searchProducts(inputValue))
-      navigate(`/search?query=${inputValue}`)
+    event.preventDefault();
+    if (inputValue.trim() !== "") {
+      dispatch(searchProducts(inputValue));
+      navigate(`/search?query=${inputValue}`);
     }
-  }
+  };
 
   return (
-    <header className="inline-block w-full body-font bg-[#00193b] text-white boxshadow-dark">
+    <header className="inline-block w-full body-font bg-[#00193b] text-white boxshadow-dark px-10">
+      {/* // <header className="inline-block w-full text-white bg-white body-font boxshadow-dark"> */}
       <div className="container flex flex-col flex-wrap items-center p-5 mx-auto text-white md:flex-row">
         <Link
           to="/"
           className="flex items-center mb-4 font-medium text-gray-900 title-font md:mb-0"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            className="w-10 h-10 p-2 text-white bg-indigo-500 rounded-full"
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-          </svg>
-          <span className="ml-3 text-xl text-white">Tailblocks</span>
+          <img
+            src="https://res.cloudinary.com/dija8tzko/image/upload/v1714654070/E-Commerce/removal.ai__1cf849e0-7551-4609-baaf-30d928826d6b-aaaa_tsq9aq.png"
+            alt=""
+            className="w-20 h-20 ml-3"
+          />
+          {/* <span className="ml-3 text-xl text-white">TechTrendy</span> */}
         </Link>
         <form className="flex-grow max-w-xl mx-auto">
           <label
@@ -137,7 +83,7 @@ const Header = ({ user, setUser }) => {
               type="search"
               id="default-search"
               className="block w-full p-4 text-sm text-white border border-solid border-[#354585] rounded-lg ps-10  focus:border-[#4F89FC]  focus-visible:border-[#4F89FC] outline-none focus:hide-placeholder bg-[#00193B] "
-              placeholder="Search Mockups, Logos..."
+              placeholder="Tìm kiếm sản phẩm"
               value={inputValue}
               onChange={handleSearchChange}
               required
@@ -157,9 +103,9 @@ const Header = ({ user, setUser }) => {
           <Link to="/tablet" className="text-lg">
             Tablet
           </Link>
-          <Link to="/news" className="text-lg">
+          {/* <Link to="/news" className="text-lg">
             Tin tức
-          </Link>
+          </Link> */}
           <Link to="/cart" className="relative ">
             <FaCartShopping className="text-2xl " />
             <span className="absolute top-[-13px] right-[-8px] min-w-[20px] min-h-20[px] flex items-center justify-center text-sm bg-[#f5a623] rounded-full">
@@ -172,7 +118,7 @@ const Header = ({ user, setUser }) => {
                 <div className="group">
                   <button
                     type="button"
-                    className="rounded-full  flex flex-col items-center justify-center w-14 h-14 text-sm font-medium text-white bg-[#4F89FC]  focus:outline-none focus:bg-gray-700"
+                    className="rounded-full  flex flex-col items-center justify-center w-14 h-14 text-sm font-medium text-white bg-[#4F89FC]  focus:outline-none"
                   >
                     <div className="text-[15px] ">
                       {user.given_name[0]} {user.family_name[0]}
@@ -182,6 +128,9 @@ const Header = ({ user, setUser }) => {
 
                   <div></div>
                   <div className="absolute -left-[50px] invisible w-[100px] mt-1 transition duration-300 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg opacity-0 top-12 group-hover:opacity-100 group-hover:visible">
+                    <div className="flex justify-center px-4 py-2 text-sm text-gray-700">
+                      <Link to="/orderhistory">Đơn mua</Link>
+                    </div>
                     <div className="py-1">
                       <a
                         href="#"
@@ -190,9 +139,6 @@ const Header = ({ user, setUser }) => {
                       >
                         Đăng xuất
                       </a>
-                    </div>
-                    <div className="flex justify-center px-4 py-2 text-sm text-gray-700">
-                      <Link to="/orderhistory">Đơn mua</Link>
                     </div>
                   </div>
                 </div>
@@ -220,7 +166,7 @@ const Header = ({ user, setUser }) => {
         </nav>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
